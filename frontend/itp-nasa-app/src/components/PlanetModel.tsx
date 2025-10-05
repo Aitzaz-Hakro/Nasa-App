@@ -4,8 +4,8 @@ import { Canvas } from "@react-three/fiber"
 import { OrbitControls, useGLTF } from "@react-three/drei"
 
 function Planet() {
-  const { scene } = useGLTF("/models/moon.glb")
-  return <primitive object={scene} scale={1.5} />
+  const { scene } = useGLTF("/models/fire_planet.glb")
+  return <primitive object={scene} scale={2.5} />
 }
 
 useGLTF.preload("/models/moon.glb")
@@ -19,7 +19,7 @@ export default function PlanetModel() {
         <Suspense fallback={null}>
           <Planet />
         </Suspense>
-        <OrbitControls enableZoom={true} />
+        <OrbitControls enableZoom={false} autoRotate={true} />
       </Canvas>
     </div>
   )

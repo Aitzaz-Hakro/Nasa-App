@@ -31,7 +31,7 @@ export default function Hero() {
           </div>
         </div>
         <div className="order-1 md:order-2">
-          <div className=" rounded-xl aspect-square w-full glow-accent">
+          <div className=" rounded-xl aspect-square w-full ">
             <ThreePlanet />
           </div>
         </div>

@@ -31,8 +31,8 @@ export default function RootLayout({
         style={{
           fontFamily: "geist-sans",
           fontWeight: "normal",
-          backgroundColor: "#111111ff",
-          color: "#ffffffff",
+          backgroundColor: "#0B0B0C",
+          color: "#E6E6E6",
           WebkitFontSmoothing: "antialiased",
           MozOsxFontSmoothing: "grayscale",
           overflowX: "hidden",
@@ -41,7 +41,7 @@ export default function RootLayout({
         {/* global particles background */}
         <div className="fixed inset-0 -z-10 pointer-events-none">
           <Particles
-            particleColors={['#22d3ee', '#000000ff']}
+            particleColors={['#FF7A00', '#FF4500']}
             particleCount={200}
             particleSpread={10}
             speed={0.1}

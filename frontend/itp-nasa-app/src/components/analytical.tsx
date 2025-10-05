@@ -2,90 +2,118 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { motion } from "framer-motion"
 
 export default function AnalysisResult() {
   const [confidence, setConfidence] = useState(0.0)
   const [label, setLabel] = useState<string>("Awaiting analysis…")
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const onResult = (e: Event) => {
-      const detail = (e as CustomEvent).detail as { confidence: number; label: string }
-      setLabel(detail.label)
-      // animate confidence progress
-      const target = detail.confidence
-      let current = 0
-      const step = () => {
-        current += 0.02
-        if (current >= target) current = target
-        setConfidence(Number(current.toFixed(3)))
-        if (current < target) requestAnimationFrame(step)
+    const fetchAnalysis = async () => {
+      setLoading(true)
+      try {
+              const apiUrl = process.env.NEXT_PUBLIC_API_URL || `http://localhost:8000`
+        const res = await fetch(`http://${apiUrl}/api/planet-analysis`)
+        const data = await res.json()
+        setLabel(data.label)
+        // Smoothly animate confidence
+        const target = data.confidence
+        let current = 0
+        const step = () => {
+          current += 0.02
+          if (current >= target) current = target
+          setConfidence(Number(current.toFixed(3)))
+          if (current < target) requestAnimationFrame(step)
+        }
+        requestAnimationFrame(step)
+      } catch (error) {
+        console.error("Error fetching analysis:", error)
+        setLabel("Error fetching data from backend.")
+      } finally {
+        setLoading(false)
       }
-      requestAnimationFrame(step)
     }
-    window.addEventListener("analysis:result", onResult as EventListener)
-    return () => window.removeEventListener("analysis:result", onResult as EventListener)
+
+    fetchAnalysis()
   }, [])
 
   const pct = Math.round(confidence * 100)
-  const radius = 64
-  const circumference = 2 * Math.PI * radius
-  const dash = circumference * confidence
+  const data = [
+    { name: "Probability of Confirmation", value: pct },
+    { name: "Probability of Not Confirmation", value: 100 - pct },
+  ]
+
+  const COLORS = ["#FF6A00", "#1A1A1A"]
+  const exists = pct >= 50
 
   return (
-    <Card className="glass glow-accent">
+    <Card className="glass glow-accent bg-[#0B0B0B]/80 backdrop-blur-md border border-[#FF6A00]/20 shadow-[0_0_20px_rgba(255,106,0,0.3)]">
       <CardHeader>
-        <CardTitle className="text-xl md:text-2xl">Analysis Result</CardTitle>
+        <CardTitle className="text-xl md:text-2xl text-[#FF6A00]">
+          Analysis Result
+        </CardTitle>
       </CardHeader>
-      <CardContent className="grid md:grid-cols-[200px_1fr] gap-8 items-center">
-        <div className="relative w-[180px] h-[180px] mx-auto">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            <circle
-              cx="100"
-              cy="100"
-              r={radius}
-              className="fill-none"
-              stroke="oklch(0.2 0.03 260)"
-              strokeWidth="12"
-              opacity={0.4}
-            />
-            <circle
-              cx="100"
-              cy="100"
-              r={radius}
-              className="fill-none"
-              stroke="oklch(0.78 0.14 190)"
-              strokeWidth="12"
-              strokeDasharray={`${dash} ${circumference - dash}`}
-              strokeLinecap="round"
-              style={{ transition: "stroke-dasharray 600ms ease" }}
-            />
-            <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
-                <feMerge>
-                  <feMergeNode in="coloredBlur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-3xl font-semibold">{pct}%</div>
-              <div className="text-xs text-muted-foreground">confidence</div>
+
+      <CardContent className="grid gap-8">
+        {loading ? (
+          <div className="text-center text-gray-400 animate-pulse">Fetching analysis from backend...</div>
+        ) : (
+          <>
+            <div className="w-full h-[300px]">
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={data}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={100}
+                    dataKey="value"
+                    paddingAngle={5}
+                    animationDuration={1200}
+                  >
+                    {data.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgba(20,20,20,0.9)",
+                      border: "none",
+                      borderRadius: "8px",
+                      color: "#fff",
+                    }}
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
-          </div>
-        </div>
-        <div>
-          <p className="text-lg md:text-xl">
-            {label === "Awaiting analysis…"
-              ? "Run an analysis from the Upload section to see results."
-              : `✅ ${label} (${pct}%)`}
-          </p>
-          <div className="mt-4 h-2 w-full rounded-full bg-muted overflow-hidden">
-            <div className="h-full bg-[oklch(0.78_0.14_190)] transition-all" style={{ width: `${pct}%` }} />
-          </div>
-        </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="text-center"
+            >
+              <h2
+                className={`text-2xl md:text-3xl font-semibold ${
+                  exists ? "text-[#FF6A00]" : "text-red-500"
+                }`}
+              >
+                {label === "Awaiting analysis…"
+                  ? "Run an analysis to see the result."
+                  : exists
+                  ? "🪐 Planet Exists"
+                  : "❌ Planet Does Not Exist"}
+              </h2>
+              <p className="text-sm text-muted-foreground mt-2">
+                Confidence Level: {pct}%
+              </p>
+            </motion.div>
+          </>
+        )}
       </CardContent>
     </Card>
   )

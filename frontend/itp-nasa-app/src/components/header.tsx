@@ -48,7 +48,7 @@ export default function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <Link href="/contribute">
-            <Button className="neon-border glow-primary bg-blue/10 text-foreground hover:bg-primary/10">
+            <Button className="neon-border glow-primary bg-transparent text-foreground hover:bg-primary/20">
               Contribute
             </Button>
           </Link>
