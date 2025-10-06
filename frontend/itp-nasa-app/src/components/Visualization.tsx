@@ -31,16 +31,16 @@ export default function Visualization() {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data}>
               <CartesianGrid stroke="color-mix(in oklch, var(--color-border) 60%, transparent)" strokeDasharray="3 3" />
-              <XAxis dataKey="t" tick={{ fill: "oklch(0.925 0 0)" }} />
-              <YAxis domain={[0.96, 1.01]} tick={{ fill: "oklch(0.925 0 0)" }} />
+              <XAxis dataKey="t" tick={{ fill: "oklch(0.75 0.02 260)" }} />
+              <YAxis domain={[0.96, 1.01]} tick={{ fill: "oklch(0.75 0.02 260)" }} />
               <Tooltip
                 contentStyle={{
-                  background: "oklch(0.108 0.002 0)",
-                  border: "1px solid oklch(0.687 0.18 45)",
-                  color: "oklch(0.925 0 0)",
+                  background: "oklch(0.13 0.025 260)",
+                  border: "1px solid oklch(0.2 0.03 260)",
+                  color: "oklch(0.96 0.02 260)",
                 }}
               />
-              <Line type="monotone" dataKey="intensity" stroke="oklch(0.687 0.18 45)" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="intensity" stroke="oklch(0.78 0.14 190)" strokeWidth={2} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>
@@ -58,12 +58,12 @@ export default function Visualization() {
             <div className="absolute inset-[72px] rounded-full border neon-border opacity-40" />
             {/* star */}
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[oklch(0.780_0.14_65)] glow-accent"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[oklch(0.98_0.1_95)] glow-accent"
               aria-label="Star"
             />
             {/* planet animating */}
             <div
-              className="absolute left-1/2 top-0 -translate-x-1/2 w-3 h-3 rounded-full bg-[oklch(0.687_0.18_45)] glow-primary animate-[spin_8s_linear_infinite] origin-[50%_128px]"
+              className="absolute left-1/2 top-0 -translate-x-1/2 w-3 h-3 rounded-full bg-[oklch(0.78_0.14_190)] glow-primary animate-[spin_8s_linear_infinite] origin-[50%_128px]"
               aria-label="Planet"
             />
           </div>

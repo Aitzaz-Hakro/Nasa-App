@@ -21,23 +21,23 @@ export default function ThreePlanet() {
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
     camera.position.set(0, 0, 3)
 
-    // Planet (smooth, slightly emissive orange)
+    // Planet (smooth, slightly emissive cyan)
     const geometry = new THREE.SphereGeometry(1, 64, 64)
     const material = new THREE.MeshStandardMaterial({
-      color: new THREE.Color("#FFB547"), // molten orange
+      color: new THREE.Color("#83fff6"), // near neon cyan
       metalness: 0.1,
       roughness: 0.4,
-      emissive: new THREE.Color("#FF7A00"),
+      emissive: new THREE.Color("#2fe1d5"),
       emissiveIntensity: 0.15,
     })
     const planet = new THREE.Mesh(geometry, material)
     scene.add(planet)
 
     // Lighting
-    const light = new THREE.PointLight("#FF4500", 2, 10)
+    const light = new THREE.PointLight("#7c86ff", 2, 10)
     light.position.set(2, 2, 2)
     scene.add(light)
-    scene.add(new THREE.AmbientLight("#E6E6E6", 0.2))
+    scene.add(new THREE.AmbientLight("#ffffff", 0.2))
 
     // Starfield (particles)
     const starsGeometry = new THREE.BufferGeometry()
@@ -50,7 +50,7 @@ export default function ThreePlanet() {
     }
     starsGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3))
     const starsMaterial = new THREE.PointsMaterial({
-      color: "#FFB547",
+      color: "#a79bff",
       size: 0.01,
       sizeAttenuation: true,
       transparent: true,

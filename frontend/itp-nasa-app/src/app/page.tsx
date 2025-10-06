@@ -31,7 +31,7 @@ export default function Home() {
      <Analytics />
      <div style={{ marginTop: "100px" }} ref={resultRef}>
 
-     <Visualization />
+     {/* <Visualization /> */}
      </div>
 
     </div>  );

@@ -100,39 +100,39 @@ export default function UploadForm({ onAnalyzedScrollTo }: Props) {
   }
 
   return (
-    <Card className="relative overflow-hidden border border-[#FF7A00]/30 bg-[#1A1A1D]/60 backdrop-blur-xl shadow-[0_0_25px_rgba(255,122,0,0.2)] rounded-2xl p-4 md:p-6 transition-all duration-300 hover:shadow-[0_0_35px_rgba(255,122,0,0.4)]">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FF7A00]/10 via-transparent to-[#FF4500]/10 pointer-events-none" />
+    <Card className="relative overflow-hidden border border-white/20 bg-white/10 backdrop-blur-xl shadow-[0_0_25px_rgba(0,255,255,0.2)] rounded-2xl p-4 md:p-6 transition-all duration-300 hover:shadow-[0_0_35px_rgba(0,255,255,0.4)]">
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-transparent to-purple-500/10 pointer-events-none" />
       <CardHeader>
-        <CardTitle className="text-xl md:text-2xl text-[#E6E6E6] font-semibold tracking-wide">
+        <CardTitle className="text-xl md:text-2xl text-white font-semibold tracking-wide">
           Upload Data or Enter Manually
         </CardTitle>
       </CardHeader>
 
       <CardContent className="mt-2 relative z-10">
         <Tabs defaultValue="upload" className="w-full">
-          <TabsList className="grid grid-cols-2 w-full bg-[#1A1A1D]/60 backdrop-blur-md rounded-lg border border-[#FF7A00]/30">
-            <TabsTrigger value="upload" className="text-[#E6E6E6] data-[state=active]:bg-[#FF7A00]/30">Upload CSV</TabsTrigger>
-            <TabsTrigger value="manual" className="text-[#E6E6E6] data-[state=active]:bg-[#FF7A00]/30">Manual Input</TabsTrigger>
+          <TabsList className="grid grid-cols-2 w-full bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
+            <TabsTrigger value="upload" className="text-white data-[state=active]:bg-cyan-500/20">Upload CSV</TabsTrigger>
+            <TabsTrigger value="manual" className="text-white data-[state=active]:bg-cyan-500/20">Manual Input</TabsTrigger>
           </TabsList>
 
           {/* Upload CSV */}
           <TabsContent value="upload" className="mt-6">
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="csv" className="text-[#E6E6E6]">CSV File</Label>
+                <Label htmlFor="csv" className="text-white">CSV File</Label>
                 <Input
                   id="csv"
                   type="file"
                   accept=".csv,text/csv"
                   onChange={(e) => setCsvName(e.target.files?.[0]?.name || "")}
-                  className="bg-[#1A1A1D]/60 border border-[#FF7A00]/30 text-[#E6E6E6] placeholder-[#A0A0A0] focus:ring-2 focus:ring-[#FF7A00] focus:border-[#FF7A00] transition-all"
+                  className="bg-white/10 border border-cyan-400/30 text-white placeholder-white/60 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                 />
-                {csvName && <p className="text-[#A0A0A0] text-sm">Selected: {csvName}</p>}
+                {csvName && <p className="text-white/70 text-sm">Selected: {csvName}</p>}
               </div>
               <Button
                 onClick={onAnalyze}
                 disabled={loading}
-                className="border border-[#FF7A00]/40 text-[#FFB547] bg-transparent hover:bg-[#FF7A00]/20 hover:shadow-[0_0_15px_rgba(255,122,0,0.4)] transition-all"
+                className="border border-cyan-400/40 text-cyan-300 bg-transparent hover:bg-cyan-500/20 hover:shadow-[0_0_15px_rgba(0,255,255,0.4)] transition-all"
               >
                 {loading ? "Analyzing…" : "Analyze"}
               </Button>
@@ -145,14 +145,14 @@ export default function UploadForm({ onAnalyzedScrollTo }: Props) {
               <div className="grid md:grid-cols-3 gap-4">
                 {numericFields.map((f) => (
                   <div key={f.key} className="grid gap-2">
-                    <Label htmlFor={f.key} className="text-[#E6E6E6]">{f.label}</Label>
+                    <Label htmlFor={f.key} className="text-white">{f.label}</Label>
                     <Input
                       id={f.key}
                       type="number"
                       value={numeric[f.key]}
                       onChange={(e) => setNumeric((prev) => ({ ...prev, [f.key]: e.target.value }))}
                       placeholder={f.label}
-                      className="bg-[#1A1A1D]/60 border border-[#FF7A00]/30 text-[#E6E6E6] placeholder-[#A0A0A0] focus:ring-2 focus:ring-[#FF7A00] focus:border-[#FF7A00] transition-all"
+                      className="bg-white/10 border border-cyan-400/30 text-white placeholder-white/60 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                     />
                   </div>
                 ))}
@@ -161,14 +161,14 @@ export default function UploadForm({ onAnalyzedScrollTo }: Props) {
               <div className="grid md:grid-cols-3 gap-4">
                 {textFields.map((f) => (
                   <div key={f.key} className="grid gap-2">
-                    <Label htmlFor={f.key} className="text-[#E6E6E6]">{f.label}</Label>
+                    <Label htmlFor={f.key} className="text-white">{f.label}</Label>
                     <Input
                       id={f.key}
                       type="text"
                       value={text[f.key]}
                       onChange={(e) => setText((prev) => ({ ...prev, [f.key]: e.target.value }))}
                       placeholder={f.label}
-                      className="bg-[#1A1A1D]/60 border border-[#FF7A00]/30 text-[#E6E6E6] placeholder-[#A0A0A0] focus:ring-2 focus:ring-[#FF7A00] focus:border-[#FF7A00] transition-all"
+                      className="bg-white/10 border border-cyan-400/30 text-white placeholder-white/60 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                     />
                   </div>
                 ))}
@@ -178,27 +178,27 @@ export default function UploadForm({ onAnalyzedScrollTo }: Props) {
                 <Button
                   onClick={onAnalyze}
                   disabled={loading}
-                  className="border border-[#FF7A00]/40 text-[#FFB547] bg-transparent hover:bg-[#FF7A00]/20 hover:shadow-[0_0_15px_rgba(255,122,0,0.4)] transition-all"
+                  className="border border-cyan-400/40 text-cyan-300 bg-transparent hover:bg-cyan-500/20 hover:shadow-[0_0_15px_rgba(0,255,255,0.4)] transition-all"
                 >
                   {loading ? "Analyzing…" : "Analyze"}
                 </Button>
                 
                 {/* Error Message */}
                 {error && (
-                  <div className="p-3 bg-[#FF4500]/20 border border-[#FF4500]/50 rounded-lg">
-                    <p className="text-sm text-[#E6E6E6]">❌ {error}</p>
+                  <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg">
+                    <p className="text-sm text-red-200">❌ {error}</p>
                   </div>
                 )}
                 
                 {/* Success Result */}
                 {result && !error && (
-                  <div className="p-3 bg-[#FF7A00]/20 border border-[#FF7A00]/50 rounded-lg">
+                  <div className="p-3 bg-cyan-500/20 border border-cyan-500/50 rounded-lg">
                     {result.sum !== undefined ? (
-                      <p className="text-sm text-[#FFB547]">
+                      <p className="text-sm text-cyan-200">
                         ✅ Sum: {result.sum.toFixed(2)} ({result.message})
                       </p>
                     ) : result.label && result.confidence ? (
-                      <p className="text-sm text-[#FFB547]">
+                      <p className="text-sm text-cyan-200">
                         ✅ Result: {result.label} ({Math.round(result.confidence * 100)}%)
                       </p>
                     ) : null}

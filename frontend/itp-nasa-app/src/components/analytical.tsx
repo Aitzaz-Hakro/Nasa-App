@@ -11,15 +11,34 @@ export default function AnalysisResult() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const fetchAnalysis = async () => {
-      setLoading(true)
-      try {
-              const apiUrl = process.env.NEXT_PUBLIC_API_URL || `http://localhost:8000`
-        const res = await fetch(`http://${apiUrl}/api/planet-analysis`)
-        const data = await res.json()
-        setLabel(data.label)
-        // Smoothly animate confidence
-        const target = data.confidence
+    const onResult = (e: Event) => {
+      console.log("🎯 Analytical component received event:", e)
+      const detail = (e as CustomEvent).detail as { 
+        sum?: number
+        confidence?: number
+        label?: string
+        field_count?: number
+        message?: string
+      }
+      
+      console.log("📊 Event detail:", detail)
+      
+      // If we have a sum result from backend, calculate confidence based on it
+      if (detail.sum !== undefined) {
+        console.log("💡 Processing sum result:", detail.sum)
+        
+        // Calculate confidence based on the sum value (adjust formula as needed)
+        // This is a mock - adjust the formula based on your data range
+        const normalizedSum = Math.abs(detail.sum)
+        const mockConfidence = Math.min(0.95, Math.max(0.05, normalizedSum / 10000))
+        const target = mockConfidence
+        
+        const resultLabel = mockConfidence > 0.5 ? "Confirmed Planet" : "Candidate Planet"
+        console.log(`✅ Setting label: ${resultLabel}, confidence: ${mockConfidence}`)
+        setLabel(resultLabel)
+        setLoading(false)
+        
+        // Animate confidence progress
         let current = 0
         const step = () => {
           current += 0.02
@@ -28,15 +47,33 @@ export default function AnalysisResult() {
           if (current < target) requestAnimationFrame(step)
         }
         requestAnimationFrame(step)
-      } catch (error) {
-        console.error("Error fetching analysis:", error)
-        setLabel("Error fetching data from backend.")
-      } finally {
+      } 
+      // If we have direct confidence/label from backend (for future ML model)
+      else if (detail.confidence !== undefined && detail.label) {
+        console.log("🔮 Processing direct prediction:", detail.label, detail.confidence)
+        const target = detail.confidence
+        setLabel(detail.label)
         setLoading(false)
+        
+        let current = 0
+        const step = () => {
+          current += 0.02
+          if (current >= target) current = target
+          setConfidence(Number(current.toFixed(3)))
+          if (current < target) requestAnimationFrame(step)
+        }
+        requestAnimationFrame(step)
+      } else {
+        console.warn("⚠️ Received event but no valid data:", detail)
       }
     }
-
-    fetchAnalysis()
+    
+    console.log("👂 Analytical component listening for analysis:result events")
+    window.addEventListener("analysis:result", onResult as EventListener)
+    return () => {
+      console.log("🔇 Analytical component removing event listener")
+      window.removeEventListener("analysis:result", onResult as EventListener)
+    }
   }, [])
 
   const pct = Math.round(confidence * 100)
